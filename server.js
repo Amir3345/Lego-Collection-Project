@@ -14,7 +14,7 @@ const express = require('express');
 const legoData = require('./Modules/LegoSets.js'); 
 
 const app = express();
-const port = 3000; // You can choose the port you prefer
+const port = 3000;
 
 
 legoData.initialize().then(() => {
@@ -36,7 +36,7 @@ legoData.initialize().then(() => {
 
   // Route to demonstrate getting a Lego set by number
   app.get('/lego/sets/num-demo', (req, res) => {
-    // You will replace '001-1' with a set number from your data
+    
     legoData.getSetByNum('001-1').then((set) => {
       res.json(set);
     }).catch((error) => {
@@ -46,7 +46,7 @@ legoData.initialize().then(() => {
 
   // Route to demonstrate getting Lego sets by theme
   app.get('/lego/sets/theme-demo', (req, res) => {
-    // Replace 'tech' with a theme from your data
+   
     legoData.getSetsByTheme('tech').then((sets) => {
       res.json(sets);
     }).catch((error) => {
