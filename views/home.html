@@ -13,16 +13,18 @@
                 <div tabindex="0" role="button" class="btn m-1">Themes</div>
                 <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                   
-                        <li><a href="/lego/sets?theme=City">City</a></li>
-                        <li><a href="/lego/sets?theme=StarWars">Star Wars</a></li>
+                        <li><a href="/lego/sets?theme=1231">Lion Knights</a></li>
+                        <li><a href="/lego/sets?theme=Classic Town">Classic Town</a></li>
                         <li><a href="/lego/sets?theme=Technic">Technic</a></li>
                     </ul>
                 </div>
         </div>
         <div class="flex-1">
             <a href="/" class="btn btn-ghost text-xl">Lego Collection</a>
-            <a href="/about" class="btn btn-ghost text-xl">About</a>
+            <a href="/about" class="btn btn-ghost text-xl" id="aboutLink">About</a>
+            
         </div>
+       
     </div>
 
 
@@ -47,7 +49,7 @@
   </div>
 
   <div class="container mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div class="flex flex-col md:flex-row items-center gap-4">
      
 
         <div class="card bg-base-100 shadow-xl">
@@ -58,7 +60,7 @@
               <h2 class="card-title">Wheel Set</h2>
               <p>This set was released in America (USA/CAN) by Samsonite in 1966. It was never released in Europe.</p>
               <div class="card-actions">
-                <button class="btn btn-primary">Buy Now</button>
+                <a href="/lego/sets/021-1" class="btn btn-primary">Learn more</a>
               </div>
             </div>
           </div>
@@ -66,14 +68,14 @@
 
           <div class="card bg-base-100 shadow-xl">
             <figure class="px-10 pt-10">
-              <img src="https://cdn.rebrickable.com/media/sets/0241187567-1.jpg" alt="Ninjago: Build Your Own Adventure" class="rounded-xl" />
+              <img src="https://cdn.rebrickable.com/media/sets/0241187567-1.jpg" alt="Ninjago: Build Your Own Adventure" class="rounded-xl" width="120" lenght="150" />
             </figure>
             <div class="card-body items-center text-center">
               <h2 class="card-title">Ninjago: Build Your Own Adventure</h2>
               <p>with Lloyd minifigure and exclusive ninja mech
                 book includes more than 50 building ideas</p>
               <div class="card-actions">
-                <button class="btn btn-primary">Buy Now</button>
+                <a href="/lego/sets/0241187567-1" class="btn btn-primary">Learn more</a>
               </div>
             </div>
           </div>
@@ -87,12 +89,14 @@
               <h2 class="card-title">Master Mechanic Set</h2>
               <p>Wide range of parts in two storage trays. includes motor, battery housing, (gear models will work automatically) gears, wheels and basic bricks.</p>
               <div class="card-actions">
-                <button class="btn btn-primary">Buy Now</button>
+                <a href="/lego/sets/003-1" class="btn btn-primary">Learn more</a>
               </div>
             </div>
           </div>
-    </div>
-  </div>
+
+
+
+
 
 
 </body>

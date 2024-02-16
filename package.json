@@ -3,18 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "tw:build": "tailwindcss build -i ./Public/CSS/tailwind.css -o ./Public/CSS/main.css"
-  },
-
   "dependencies": {
     "@tailwindcss/typography": "^0.5.10",
     "daisyui": "^4.7.2",
     "express": "^4.18.2"
   },
-
+  
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "tw:build": "tailwindcss build -i ./Public/CSS/tailwind.css -o ./Public/CSS/main.css"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
