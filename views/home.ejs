@@ -7,27 +7,8 @@
     <title>Lego Collection</title>
 </head>
 <body>
-    <div class="navbar bg-base-100">
-        <div class="flex-none">
-            <div class="dropdown dropdown-hover">
-                <div tabindex="0" role="button" class="btn m-1">Themes</div>
-                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                  
-                        <li><a href="/lego/sets?theme=Lion Knights">Lion Knights</a></li>
-                        <li><a href="/lego/sets?theme=Classic Town">Classic Town</a></li>
-                        <li><a href="/lego/sets?theme=Technic">Technic</a></li>
-                    </ul>
-                </div>
-        </div>
-        <div class="flex-1">
-            <a href="/" class="btn btn-ghost text-xl">Lego Collection</a>
-            <a href="/about" class="btn btn-ghost text-xl" id="aboutLink">About</a>
-            
-        </div>
-       
-    </div>
 
-
+  <%- include('partials/navbar', {page: '/', }) %>
 
 <div class="container mx-auto">
    

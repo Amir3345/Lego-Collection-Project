@@ -1,0 +1,64 @@
+<%- include('partials/navbar', { page: '/lego/sets' }) %>
+
+
+
+<div class="hero  bg-base-100 ">
+  <div class="hero-content flex-col lg:flex-row-reverse">
+    <img src="/img/Face.png" class="max-w-sm rounded-lg"  />
+    <div>
+      <h1 class="text-5xl text-center ">THE COLLECTION!</h1>
+      <p class="py-6 text-center">You can filter our collection with a few themes:</p>
+
+              
+      <div class="flex space-x-2">
+        <a href="/lego/sets?theme=Lion Knights" class="<%= ( (!theme || theme == 'Lion Knights')) ? 'btn-active bg-blue-500 text-white hover:bg-blue-600 ' : '' %> btn btn-sm rounded-lg">Lion Knights</a>
+        <a href="/lego/sets?theme=Classic Town" class="<%= ( (!theme || theme == 'Classic Town')) ? 'btn-active bg-green-500 text-white hover:bg-green-600' : '' %> btn btn-sm rounded-lg">Classic Town</a>
+        <a href="/lego/sets?theme=technic" class="<%= ( (!theme || theme == 'technic')) ? 'btn-active bg-red-500 text-white hover:bg-red-600 ' : '' %> btn btn-sm rounded-lg">Technic</a>
+      </div>
+       
+    
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    
+    <thead class="bg-primary text-white">
+      <tr>
+        <th class="w-1/6 py-3 px-4 uppercase font-semibold text-lg text-center ">Image</th>
+        <th class="py-3 px-4 uppercase font-semibold text-lg">Name</th>
+        <th class="py-3 px-4 uppercase font-semibold text-lg">Theme</th>
+        <th class="py-3 px-4 uppercase font-semibold text-lg">Year Released</th>
+        <th class="py-3 px-4 uppercase font-semibold text-lg">Parts</th>
+        <th class="py-3 px-4 uppercase font-semibold text-lg">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% sets.forEach(function(set, index) { %>
+      
+        <tr class="hover">
+          <td class="py-3 px-4 text-center">
+            <img src="<%= set.img_url %>" alt="<%= set.name %>" class="rounded-xl">
+          </td>
+          <td class="py-3 px-4"><%= set.name %></td>
+          <td class="py-3 px-4">
+            <a href="/lego/sets?theme=<%= set.theme %>" class="btn btn-outline btn-error">
+              <%= set.theme %>
+            </a>
+          </td>
+          <td class="py-3 px-4"><%= set.year %></td>
+          <td class="py-3 px-4"><%= set.num_parts %></td>
+          <td class="py-3 px-4">
+            <a href="/lego/sets/<%= set.set_num %>" class="btn btn-outline btn-error">
+              Details
+            </a>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,40 @@
+<%- include('partials/navbar', { page: "" }) %>
+
+
+
+<div class="hero  bg-base-200">
+  <div class="hero-content text-center">
+    <div class="max-w-md">
+      <h1 class="text-5xl font-bold"><%= set.name %></h1>
+      <p class="py-6">Below, you will find detailed information about the set:</p>
+
+    </div>
+  </div>
+</div>
+
+
+
+  <div class="hero-content flex-col lg:flex-row">
+    <img src="<%= set.img_url %>" class="max-w-sm rounded-lg shadow-2xl" alt="Lego Set Image"/>
+    <div class="bg-gray-100 p-4 rounded-lg shadow"> <!-- Added light background, padding, rounded corners, and shadow -->
+      <ul>
+        <li><strong>Name:</strong> <%= set.name %></li> <!-- Made header names bold -->
+        <li><strong>Theme:</strong> <%= set.theme %></li>
+        <li><strong>Year Released:</strong> <%= set.year %></li>
+        <li><strong>Number of Parts:</strong> <%= set.num_parts %></li>
+      </ul>
+      <p id="quote"></p>
+      <a href="#" onclick="history.back(); return false;" class="btn btn-primary">Back</a>
+    </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  fetch('https://quotable.io/random')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('quote').textContent = `"${data.content}" — ${data.author}`;
+    })
+    .catch(error => console.log('Error fetching quote:', error));
+});
+</script>

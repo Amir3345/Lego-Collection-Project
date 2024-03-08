@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="/CSS/main.css" />
+<div class="navbar bg-base-100">
+    
+    <div class="flex-1 ">
+
+     
+        <a href="/" class="btn  text-xl  <%= (page=="/") ? 'btn-active btn-error ' : '' %>"><%- (page=="/") ? '<strong>Lego Collection</strong>' : 'Lego Collection' %></a> |
+        <a href="/about" class="btn  text-xl <%= (page=="/about") ? 'btn-active btn-error' : '' %>"><%- (page=="/about") ? '<strong>About</strong>' : 'About' %></a> 
+      </div>
+      <div class="flex-grow"></div> 
+      <div>
+          <a href="/lego/sets" class="btn  text-xl <%= (page == '/lego/sets') ? 'btn-active btn-error' : '' %>"><%- (page == '/') ? '<strong>View Collection</strong>' : 'View Collection' %></a>
+      </div>
+  </div>
+   
+</div>   

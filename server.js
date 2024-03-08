@@ -7,7 +7,7 @@
  * Student ID: 144725223
  * Date: 2/2/2024
  *  
- * Published URL: https://different-jade-abalone.cyclic.app
+ * Published URL: https://different-jade-abalone.cyclic.app 
  *********************************************************************************/
 const express = require('express');
 const legoData = require('./Modules/LegoSets.js'); 
@@ -18,56 +18,68 @@ const app = express();
 const port = 3000;
 
 app.use(express.static('Public'));
+app.set('view engine', 'ejs');
 
 legoData.initialize().then(() => {
   console.log('Lego data initialized.');
 
   // Root route
   app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'home.html'));
+    res.render('home');
   });
 
   // About route
   app.get('/about', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'about.html'));
+    res.render('about');
   });
 
- // Route to get all Lego sets or filter by theme
-app.get('/lego/sets', (req, res) => {
-  const theme = req.query.theme;
-  if (theme) {
-    legoData.getSetsByTheme(theme).then((sets) => {
-      if (sets.length > 0) { // Check if any sets were found
-        res.json(sets);
-      }
-        }).catch((error) => {
-          console.error(error); // Log the error for debugging
-          res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-        }); 
-  } else {
-    legoData.getAllSets().then((sets) => {
-      res.json(sets);
-    }).catch((error) => {
-      console.error(error); // Log the error for debugging
-      res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-    });
-  }
+  app.get('/lego/sets', (req, res) => {
+    const theme = req.query.theme;
+    if (theme) {
+      legoData.getSetsByTheme(theme).then((sets) => {
+        if (sets.length > 0) { // Check if any sets were found
+          res.render('sets', { sets: sets , theme: theme}); // Pass the sets data to the EJS view
+        } else {
+          res.status(404).render('404', { message: "There's No Sets found " + theme });
+        }
+      }).catch((error) => {
+        console.error(error); // Log the error for debugging
+        res.status(404).render('404', { message: "Unable to find Sets for a matching theme " });
+      });
+    } else {
+      legoData.getAllSets().then((sets) => {
+        res.render('sets', { sets: sets, page: '/lego/sets', theme: theme || null });
+      }).catch((error) => {
+        console.error(error); // Log the error for debugging
+        res.status(404).render('404', { message: "An error occurred while fetching all sets." });
+      });
+    }
+  });
+  
+
+
+// Route to get a Lego set by number
+app.get('/lego/sets/:setNum', (req, res) => {
+  const setNum = req.params.setNum;
+  legoData.getSetByNum(setNum).then((set) => {
+    if(set) {
+      res.render('set', { set: set });
+    } else {
+
+      res.status(404).render('404', { message: " theres no set " + setNum });
+    }
+  }).catch((error) => {
+    console.error(error); 
+    
+    res.status(404).render('404', { message: "Unable to find sets with the specific set number" });
+  });
 });
 
 
-  // Route to get a Lego set by number
-  app.get('/lego/sets/:setNum', (req, res) => {
-    const setNum = req.params.setNum;
-    legoData.getSetByNum(setNum).then((set) => {
-      res.json(set);
-    }).catch((error) => {
-      res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-    });
-  });
 
   // Custom 404 error page
   app.use((req, res) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+    res.status(404).render("404", {message: "I'm sorry, we're unable to find what you're looking for"})
   });
 
   app.listen(port, () => {
@@ -77,3 +89,6 @@ app.get('/lego/sets', (req, res) => {
 }).catch((error) => {
   console.error('Failed to initialize lego data:', error);
 });
+
+
+
