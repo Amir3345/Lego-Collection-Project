@@ -1634,6 +1634,10 @@ html {
   margin-bottom: 1.25rem;
 }
 
+.box-border {
+  box-sizing: border-box;
+}
+
 .flex {
   display: flex;
 }
@@ -1696,10 +1700,6 @@ html {
   overflow-x: auto;
 }
 
-.rounded {
-  border-radius: 0.25rem;
-}
-
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -1745,6 +1745,10 @@ html {
 
 .bg-opacity-60 {
   --tw-bg-opacity: 0.6;
+}
+
+.p-14 {
+  padding: 3.5rem;
 }
 
 .p-4 {

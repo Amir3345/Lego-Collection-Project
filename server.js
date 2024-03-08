@@ -37,20 +37,20 @@ legoData.initialize().then(() => {
     const theme = req.query.theme;
     if (theme) {
       legoData.getSetsByTheme(theme).then((sets) => {
-        if (sets.length > 0) { // Check if any sets were found
-          res.render('sets', { sets: sets , theme: theme}); // Pass the sets data to the EJS view
+        if (sets.length > 0) { 
+          res.render('sets', { sets: sets , theme: theme}); 
         } else {
           res.status(404).render('404', { message: "There's No Sets found " + theme });
         }
       }).catch((error) => {
-        console.error(error); // Log the error for debugging
+        console.error(error); 
         res.status(404).render('404', { message: "Unable to find Sets for a matching theme " });
       });
     } else {
       legoData.getAllSets().then((sets) => {
         res.render('sets', { sets: sets, page: '/lego/sets', theme: theme || null });
       }).catch((error) => {
-        console.error(error); // Log the error for debugging
+        console.error(error); 
         res.status(404).render('404', { message: "An error occurred while fetching all sets." });
       });
     }
