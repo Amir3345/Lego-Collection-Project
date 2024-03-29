@@ -1,0 +1,62 @@
+<%- include('partials/navbar', {page: '/lego/addSet' }) %>
+
+
+<div style="background-image: url('/img/lego_wallpaper.jpg');" class="bg-cover bg-center min-h-screen flex flex-col items-center justify-center">
+        
+    <div class="bg-yellow-80 bg-opacity-75 text-white text-center py-10 px-4 rounded-lg shadow-lg">
+        <h1 class="font-bold text-4xl mb-4">Add Your Set Here</h1>
+        <p class="text-xl">Expand the LEGO set collection .</p>
+    </div>
+    
+    <form action="/lego/addSet"  method="post" enctype="application/x-www-form-urlencoded" class="max-w-lg mx-auto my-8 px-4 py-6 shadow-lg rounded-lg bg-white bg-opacity-90">
+  <div class="mb-4">
+      <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
+      <input type="text" name="name" id="name" required
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+      <label for="year" class="block text-gray-700 text-sm font-bold mb-2">Year:</label>
+      <input type="year" name="year" id="year" required
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+      <label for="num_parts" class="block text-gray-700 text-sm font-bold mb-2">Number of Parts:</label>
+      <input type="number" name="num_parts" id="num_parts" required
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+      <label for="img_url" class="block text-gray-700 text-sm font-bold mb-2">Image URL:</label>
+      <input type="url" name="img_url" id="img_url" required
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-6">
+      <label for="theme_id" class="block text-gray-700 text-sm font-bold mb-2">Theme:</label>
+      <select name="theme_id" id="theme_id" required
+              class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+        <% themes.forEach(theme => { %>
+          <option value="<%= theme.id %>"><%= theme.name %></option>
+        <% }) %>
+      </select>
+  </div>
+
+  <div class="mb-6">
+      <label for="set_num" class="block text-gray-700 text-sm font-bold mb-2">Set Number:</label>
+      <input type="text" name="set_num" id="set_num" required
+             value="<%= Set ? Set.set_num : '' %>" 
+             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+  </div>
+
+  <div class="flex items-center justify-between">
+      <button type="submit"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Submit
+      </button>
+  </div>
+</form>
+</div>
+
+

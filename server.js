@@ -16,9 +16,30 @@ const path = require('path');
 
 const app = express();
 const port = 3000;
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(express.static('Public'));
 app.set('view engine', 'ejs');
+
+require("dotenv").config();
+const { name } = require("ejs");
+const Sequelize = require("sequelize"); 
+
+const sequelize = new Sequelize(
+  process.env.PGDATABASE,
+  process.env.PGUSER,
+  process.env.PGPASSWORD, 
+  {
+    host: process.env.PGHOST,
+    dialect: "postgres",
+    port: 5432,
+    dialectOptions: {
+      ssl: { rejectUnauthorized: false },
+    },
+  }
+);
+
 
 legoData.initialize().then(() => {
   console.log('Lego data initialized.');
@@ -92,3 +113,62 @@ app.get('/lego/sets/:setNum', (req, res) => {
 
 
 
+//Assigment 5
+
+
+//route to open addset page
+app.get('/lego/addSet', async (req, res) => {
+  try {
+    const themes = await legoData.getAllThemes(); 
+    res.render('addSet', { themes });
+  } catch (err) {
+    console.error(err);
+    res.render('500', { message: "Unable to load the Add Set page." });
+  }
+}); 
+
+// route to post form addset to the database
+app.post('/lego/addSet', async (req, res) => {
+  try {
+    
+    await legoData.addSet(req.body); 
+    res.redirect('/lego/sets'); 
+  } catch (err) {
+    console.error(err);
+    res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err}` });
+  }
+});
+
+//route to open edit page
+app.get('/lego/editSet/:num', async (req, res) => {
+  try {
+    const set = await legoData.getSetByNum(req.params.num);
+    const themes = await legoData.getAllThemes();
+    res.render('editSet', { set, themes });
+  } catch (err) {
+    console.error(err);
+    res.status(404).render('404', { message: "Set not found." });
+  }
+});
+
+// route to post form of the edited set to the database
+app.post('/lego/editSet/:num', async (req, res) => {
+  try {
+    await legoData.editSet(req.params.num, req.body);
+    res.redirect('/lego/sets');
+  } catch (err) {
+    console.error(err);
+    res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err}` });
+  }
+});
+
+//route to Delete a set
+app.get('/lego/deleteSet/:num', async (req, res) => {
+  try {
+    await legoData.deleteSet(req.params.num);
+    res.redirect('/lego/sets');
+  } catch (err) {
+    console.error(err);
+    res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err}` });
+  }
+});
