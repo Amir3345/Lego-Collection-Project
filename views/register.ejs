@@ -1,0 +1,123 @@
+<%- include('partials/navbar', { page: '/register' }) %>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="/CSS/main.css" />
+  </head>
+  <body>
+    <div
+      class="hero min-h-screen bg-base-200"
+      style="
+        background-image: url('/img/iCloud login page background gradient.jpg');
+      "
+    >
+      <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="text-center lg:text-left">
+          <h1 class="text-5xl font-bold">Register now!</h1>
+          <p class="py-6">
+            Create your account to access our amazing collection
+          </p>
+        </div>
+        <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <% if (!successMessage) { %>
+          <form action="/register" method="POST" class="card-body">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">User Name</span>
+              </label>
+              <input
+                type="text"
+                id="userName"
+                name="userName"
+                placeholder="User Name"
+                required
+                class="input input-bordered"
+              />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Password</span>
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                required
+                class="input input-bordered"
+              />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Confirm Password</span>
+              </label>
+              <input
+                type="password"
+                id="password2"
+                name="password2"
+                placeholder="Confirm Password"
+                required
+                class="input input-bordered"
+              />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Email Address</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email Address"
+                required
+                class="input input-bordered"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </form>
+          <% } %> <% if (errorMessage) { %>
+          <div class="alert alert-error mt-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span><%= errorMessage %></span>
+          </div>
+          <% } %> <% if (successMessage) { %>
+          <div class="alert mt-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 90 0118 0z"
+              />
+            </svg>
+            <span><%= successMessage %></span>
+          </div>
+          <br />
+          <a href="/login" class="btn btn-success">Proceed to Log in</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

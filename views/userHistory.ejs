@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<%- include('partials/navbar', {page: '/userHistory' }) %>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User History</title>
+    <link rel="stylesheet" href="/CSS/main.css" />
+  </head>
+  <body>
+    <div class="hero small-h-screen bg-base-200">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <% if (session.user) { %>
+          <h1 class="text-5xl font-bold">
+            Welcome, <%= session.user.userName %>
+          </h1>
+          <p class="py-6">Email: <%= session.user.email %></p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mx-auto mt-10">
+      <h2 class="text-4xl font-bold mb-5">Login History:</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 text-2xl font-bold">Login Date/Time</th>
+            <th class="px-4 py-2 text-2xl font-bold">Client Information</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (session.user && session.user.loginHistory) { %> <%
+          session.user.loginHistory.forEach((login) => { %>
+          <tr>
+            <td><%= new Date(login.dateTime).toLocaleString() %></td>
+            <td><%= login.userAgent %></td>
+          </tr>
+          <% }) %> <% } else { %>
+          <tr>
+            <td colspan="2">No login history available.</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

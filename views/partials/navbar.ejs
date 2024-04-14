@@ -1,19 +1,57 @@
 <link rel="stylesheet" href="/CSS/main.css" />
 <div class="navbar bg-base-100">
-    
-    <div class="flex-1 ">
- 
-     
-        <a href="/" class="btn  text-xl  <%= (page=="/") ? 'btn-active btn-error ' : '' %>"><%- (page=="/") ? '<strong>Lego Collection</strong>' : 'Lego Collection' %></a> |
-        <a href="/about" class="btn  text-xl <%= (page=="/about") ? 'btn-active btn-error' : '' %>"><%- (page=="/about") ? '<strong>About</strong>' : 'About' %></a> 
-      </div>
-      
+    <div class="flex-1">
+        <a href="/" class="btn text-xl <%= (page=="/") ? 'btn-active btn-error ' : '' %>"><%- (page=="/") ? '<strong>Lego Collection</strong>' : 'Lego Collection' %></a> |
+        <a href="/about" class="btn text-xl <%= (page=="/about") ? 'btn-active btn-error' : '' %>"><%- (page=="/about") ? '<strong>About</strong>' : 'About' %></a>
+    </div>
 
-      <div class="flex-grow"></div> 
-      <div>
-          <a class="btn text-xl <%= (page == "/lego/addSet") ? 'btn-active btn-error' : '' %>" href="/lego/addSet">Add to Collection</a> |
-          <a href="/lego/sets" class="btn  text-xl <%= (page == '/lego/sets') ? 'btn-active btn-error' : '' %>"><%- (page == '/') ? '<strong>View Collection</strong>' : 'View Collection' %></a>
-      </div>
-  </div>
-   
-</div>   
+    <div class="flex-grow"></div>
+
+  
+      
+        <a href="/lego/sets" class="btn text-xl <%= (page == '/lego/sets') ? 'btn-active btn-error' : '' %>">
+            <%- (page == '/') ? '<strong>View Collection</strong>' : 'View Collection' %>
+        </a>
+
+        |
+
+        <% if (session && session.user) { %>
+            <div class="dropdown dropdown-end">
+              <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                <div class="w-14 h-14 rounded-full shadow-md">
+                    <img alt="User Avatar" src="/img/Face.png" />
+                  </div>                  
+              </div>
+              <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                <li>
+                    <p1 class="text-xl">Account <%= session.user.userName %></p1>
+                </li>
+                <li>
+                  <a href="/lego/addSet" class="<%= (page == '/lego/addSet') ? 'btn-active btn-error' : '' %>">Add to Collection</a>
+                </li>
+                <li>
+                  <a href="/userHistory" class="<%= (page == '/userHistory') ? 'btn-active btn-error' : '' %>">User History</a>
+                </li>
+                <li>
+                  <a href="/logout">Logout</a>
+                </li>
+              </ul>
+            </div>
+          <% } else { %>
+            <div class="dropdown dropdown-end">
+              <div tabindex="0" role="button" class="btn text-xl">Account</div>
+              <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                <li>
+                  <a href="/login" class="<%= (page == '/login') ? 'btn-active btn-error' : '' %>">Login</a>
+                </li>
+                <li>
+                  <a href="/register" class="<%= (page == '/register') ? 'btn-active btn-error' : '' %>">Register</a>
+                </li>
+              </ul>
+            </div>
+          <% } %>
+          
+
+
+    </div>
+</div>
