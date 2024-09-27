@@ -3,21 +3,14 @@
   "builds": [
     {
       "src": "server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["dist/**"] }
     }
   ],
   "routes": [
     {
-      "src": "/public/(.*)", 
-      "dest": "/Public/$1"
-    },
-    {
-      "src": "/lego/sets", 
-      "dest": "/server.js"
-    },
-    {
-      "src": "/(.*)", 
-      "dest": "/server.js"
+      "src": "/(.*)",
+      "dest": "server.js"
     }
   ]
 }
