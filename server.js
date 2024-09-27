@@ -1,14 +1,3 @@
-/*********************************************************************************
- * WEB322 – Assignment 02
- * I declare that this assignment is my own work in accordance with Seneca College's
- * Academic Integrity Policy.
- *
- * Name: Amir Hossein Behzad
- * Student ID: 144725223
- * Date: 2/2/2024
- *
- * Published URL: https://different-jade-abalone.cyclic.app
- *********************************************************************************/
 const express = require("express");
 const legoData = require("./Modules/LegoSets.js");
 const path = require("path");
