@@ -1,243 +1,235 @@
 const express = require("express");
-const legoData = require("./Modules/LegoSets.js"); // Importing the Lego data module
-const path = require("path"); // Path module for resolving file paths
-const authData = require("./Modules/auth-service.js"); // Importing the authentication service module
-const clientSessions = require("client-sessions"); // Importing client-sessions for session management
+const legoData = require("./Modules/LegoSets.js");
+const path = require("path");
+const authData = require("./Modules/auth-service.js");
+const clientSessions = require("client-sessions");
 
 const app = express();
 const port = 3000;
-
-// Middleware for parsing URL-encoded and JSON request bodies
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.set('views', __dirname + '/views'); // Setting up the views directory for rendering templates
-
-// Serving static files from the "Public" directory
+app.set('views', __dirname + '/views');
+//app.use(express.static("Public"));
 app.use(express.static(__dirname + '/Public')); 
+app.set("view engine", "ejs");
 
-app.set("view engine", "ejs"); // Setting EJS as the view engine
+require("dotenv").config();
+const { name } = require("ejs");
+const Sequelize = require("sequelize");
 
-require("dotenv").config(); // Loading environment variables from a .env file
-const { name } = require("ejs"); // Importing "name" from EJS (this may not be necessary unless used somewhere else)
-const Sequelize = require("sequelize"); // Importing Sequelize for database connection
-
-require('pg'); // Explicitly requiring PostgreSQL module
+require('pg'); 
 const sequelize = new Sequelize(
-  process.env.PGDATABASE, // Database name from environment variables
-  process.env.PGUSER,     // Database username from environment variables
-  process.env.PGPASSWORD, // Database password from environment variables
+  process.env.PGDATABASE,
+  process.env.PGUSER,
+  process.env.PGPASSWORD,
   {
-    host: process.env.PGHOST, // Database host (usually localhost or cloud host)
-    dialect: "postgres",      // Specifying PostgreSQL as the dialect
-    port: 5432,               // Default PostgreSQL port
+    host: process.env.PGHOST,
+    dialect: "postgres",
+    port: 5432,
     dialectOptions: {
-      ssl: { rejectUnauthorized: false }, // SSL options for secure database connection
+      ssl: { rejectUnauthorized: false },
     },
   }
 );
 
-// Middleware function to ensure a user is logged in before proceeding
 function ensureLogin(req, res, next) {
-  if (!req.session) { // If no session is found, redirect to login
+  if (!req.session) {
     res.redirect("/login");
   } else {
-    next(); // If session exists, proceed to the next middleware/route handler
+    next();
   }
 }
 
-// Configuring client-side session handling
 app.use(
   clientSessions({
-    cookieName: "session", // Name of the session cookie
-    secret: process.env.SESSION_SECRET, // Secret for encrypting session data
-    duration: 15 * 60 * 1000, // Session expiration duration (15 minutes)
-    activeDuration: 1000 * 60, // Extend session by 1 minute if user is active
+    cookieName: "session",
+    secret: process.env.SESSION_SECRET,
+    duration: 15 * 60 * 1000,
+    activeDuration: 1000 * 60,
   })
 );
 
-// Middleware to make session data available in the view templates
 app.use((req, res, next) => {
-  res.locals.session = req.session; // Assign session data to locals for easy access in templates
-  next(); // Proceed to the next middleware/route handler
+  res.locals.session = req.session;
+  next();
 });
 
-// Initialize Lego data, then define routes if successful
 legoData
   .initialize()
   .then(() => {
     console.log("Lego data initialized.");
 
-    // Root route (Home page)
+    // Root route
     app.get("/", (req, res) => {
-      res.render("home"); // Render the "home" view template
+      res.render("home");
     });
 
-    // About page route
+    // About route
     app.get("/about", (req, res) => {
-      res.render("about"); // Render the "about" view template
+      res.render("about");
     });
 
-    // Route to get Lego sets by theme or all sets
+    // Route to get a Lego set by Theme
     app.get("/lego/sets", (req, res) => {
-      const theme = req.query.theme; // Extract the theme from the query parameter
-      if (theme) { // If a theme is provided, fetch sets by theme
+      const theme = req.query.theme;
+      if (theme) {
         legoData
           .getSetsByTheme(theme)
           .then((sets) => {
             if (sets.length > 0) {
-              res.render("sets", { sets: sets, theme: theme }); // Render sets view if sets are found
+              res.render("sets", { sets: sets, theme: theme });
             } else {
               res.status(404).render("404", {
-                message: "There's No Sets found " + theme, // Render 404 view if no sets found
+                message: "There's No Sets found " + theme,
               });
             }
           })
           .catch((error) => {
-            console.error(error); // Log any error in fetching sets
+            console.error(error);
             res.status(404).render("404", {
-              message: "Unable to find Sets for a matching theme ", // Render 404 if there's an error
+              message: "Unable to find Sets for a matching theme ",
             });
           });
-      } else { // If no theme is provided, fetch all sets
+      } else {
         legoData
           .getAllSets()
           .then((sets) => {
             res.render("sets", {
-              sets: sets, // Pass all sets to the template
-              page: "/lego/sets", // Pass the current page for navigation highlighting
-              theme: theme || null, // Pass the theme if available, else null
+              sets: sets,
+              page: "/lego/sets",
+              theme: theme || null,
             });
           })
           .catch((error) => {
-            console.error(error); // Log error if fetching all sets fails
+            console.error(error);
             res.status(404).render("404", {
-              message: "An error occurred while fetching all sets.", // Render 404 view on error
+              message: "An error occurred while fetching all sets.",
             });
           });
       }
     });
 
-    // Route to get Lego set by its number
+    // Route to get a Lego set by number
     app.get("/lego/sets/:setNum", (req, res) => {
-      const setNum = req.params.setNum; // Extract set number from the URL
+      const setNum = req.params.setNum;
       legoData
-        .getSetByNum(setNum) // Fetch set by its number
+        .getSetByNum(setNum)
         .then((set) => {
           if (set) {
-            res.render("set", { set: set }); // Render set view if set is found
+            res.render("set", { set: set });
           } else {
-            res.status(404).render("404", { message: " there's no set " + setNum }); // Render 404 if set not found
+            res
+              .status(404)
+              .render("404", { message: " theres no set " + setNum });
           }
         })
         .catch((error) => {
-          console.error(error); // Log error if fetching set fails
+          console.error(error);
+
           res.status(404).render("404", {
-            message: "Unable to find sets with the specific set number", // Render 404 on error
+            message: "Unable to find sets with the specific set number",
           });
         });
     });
 
-    // Custom 404 error handler (this should be the last route)
+    // Custom 404 error page
     app.use((req, res) => {
       res.status(404).render("404", {
-        message: "I'm sorry, we're unable to find what you're looking for", // Render custom 404 view
+        message: "I'm sorry, we're unable to find what you're looking for",
       });
     });
   })
   .catch((error) => {
-    console.error("Failed to initialize lego data:", error); // Log error if data initialization fails
+    console.error("Failed to initialize lego data:", error);
   });
 
-// Assignment 5 routes
-
-// Route to display the Add Set form (requires login)
+//Assigment 5
+//route to open addset page
 app.get("/lego/addSet", ensureLogin, async (req, res) => {
   try {
-    const themes = await legoData.getAllThemes(); // Fetch all themes for the dropdown
-    res.render("addSet", { themes }); // Render the addSet view with the themes data
+    const themes = await legoData.getAllThemes();
+    res.render("addSet", { themes });
   } catch (err) {
-    console.error(err); // Log error if fetching themes fails
-    res.render("500", { message: "Unable to load the Add Set page." }); // Render 500 error if something goes wrong
+    console.error(err);
+    res.render("500", { message: "Unable to load the Add Set page." });
   }
 });
 
-// Route to handle form submission for adding a set
+// route to post form addset to the database
 app.post("/lego/addSet", ensureLogin, async (req, res) => {
   try {
-    await legoData.addSet(req.body); // Add the set using the form data
-    res.redirect("/lego/sets"); // Redirect to the sets page after adding
+    await legoData.addSet(req.body);
+    res.redirect("/lego/sets");
   } catch (err) {
-    console.error(err); // Log any errors that occur
+    console.error(err);
     res.render("500", {
-      message: `I'm sorry, but we have encountered the following error: ${err}`, // Render 500 view on error
+      message: `I'm sorry, but we have encountered the following error: ${err}`,
     });
   }
 });
 
-// Route to display edit page for a set (requires login)
+//route to open edit page
 app.get("/lego/editSet/:num", ensureLogin, async (req, res) => {
   try {
-    const set = await legoData.getSetByNum(req.params.num); // Fetch the set to edit
-    const themes = await legoData.getAllThemes(); // Fetch themes for dropdown
-    res.render("editSet", { set, themes }); // Render the editSet view
+    const set = await legoData.getSetByNum(req.params.num);
+    const themes = await legoData.getAllThemes();
+    res.render("editSet", { set, themes });
   } catch (err) {
-    console.error(err); // Log error if fetching set/themes fails
-    res.status(404).render("404", { message: "Set not found." }); // Render 404 view if set not found
+    console.error(err);
+    res.status(404).render("404", { message: "Set not found." });
   }
 });
 
-// Route to handle form submission for editing a set
+// route to post form of the edited set to the database
 app.post("/lego/editSet/:num", ensureLogin, async (req, res) => {
   try {
-    await legoData.editSet(req.params.num, req.body); // Edit the set using form data
-    res.redirect("/lego/sets"); // Redirect to the sets page after editing
+    await legoData.editSet(req.params.num, req.body);
+    res.redirect("/lego/sets");
   } catch (err) {
-    console.error(err); // Log error if editing fails
+    console.error(err);
     res.render("500", {
-      message: `I'm sorry, but we have encountered the following error: ${err}`, // Render 500 view on error
+      message: `I'm sorry, but we have encountered the following error: ${err}`,
     });
   }
 });
 
-// Route to delete a set (requires login)
+//route to Delete a set
 app.get("/lego/deleteSet/:num", ensureLogin, async (req, res) => {
   try {
-    await legoData.deleteSet(req.params.num); // Delete the set by its number
-    res.redirect("/lego/sets"); // Redirect to the sets page after deletion
+    await legoData.deleteSet(req.params.num);
+    res.redirect("/lego/sets");
   } catch (err) {
-    console.error(err); // Log error if deletion fails
+    console.error(err);
     res.render("500", {
-      message: `I'm sorry, but we have encountered the following error: ${err}`, // Render 500 view on error
+      message: `I'm sorry, but we have encountered the following error: ${err}`,
     });
   }
 });
 
-// Assignment 6: User Authentication
-
+//Assigment 6
 authData
-  .initialize() // Initialize authentication data
+  .initialize()
   .then(() => {
     console.log("Authentication data initialized.");
 
     // Route for rendering the register view
     app.get("/register", (req, res) => {
-      res.render("register", { errorMessage: null, successMessage: null }); // Render the register page
+      res.render("register", { errorMessage: null, successMessage: null });
     });
 
-    // Route to handle user registration
+    // Route for handling user registration
     app.post("/register", async (req, res) => {
-      const { userName, email, password } = req.body; // Extract registration details
+      const { userName, email, password } = req.body;
       try {
-        const newUser = await authData.registerUser(req.body); // Register the new user
+        const newUser = await authData.registerUser(req.body);
         res.render("register", {
-          successMessage: "User created", // Show success message if registration succeeds
+          successMessage: "User created",
           errorMessage: null,
         });
       } catch (err) {
-        console.error(err); // Log error if registration fails
+        console.error(err);
         res.render("register", {
-          errorMessage: err, // Show error message if registration fails
+          errorMessage: err,
           userName,
           successMessage: null,
         });
@@ -246,48 +238,50 @@ authData
 
     // Route for rendering the login view
     app.get("/login", (req, res) => {
-      res.render("login", { errorMessage: null }); // Render the login page
+      res.render("login", { errorMessage: null });
     });
 
-    // Route to handle user login
+    // Route for handling login
     app.post("/login", async (req, res) => {
-      req.body.userAgent = req.get("User-Agent"); // Set User-Agent in request body for login history
+      // Set User-Agent in request body
+      req.body.userAgent = req.get("User-Agent");
       try {
-        const user = await authData.checkUser(req.body); // Authenticate the user
+        const user = await authData.checkUser(req.body);
         if (user) {
-          // Store user details in session if authenticated
+          // Add user details to session
           req.session.user = {
             userName: user.userName,
             email: user.email,
             loginHistory: user.loginHistory,
           };
-          res.redirect("/lego/sets"); // Redirect to the sets page after login
+          res.redirect("/lego/sets");
         } else {
           res.render("login", {
-            errorMessage: "Invalid username or password", // Show error message if login fails
+            errorMessage: "Invalid username or password",
           });
         }
       } catch (err) {
-        res.render("login", { errorMessage: err }); // Render login page with error message on error
+        res.render("login", { errorMessage: err });
       }
     });
 
-    // Route to handle user logout
+    // Route for logging out
     app.get("/logout", (req, res) => {
-      req.session.reset(); // Clear session on logout
-      res.redirect("/"); // Redirect to home page after logout
+      req.session.reset();
+      res.redirect("/");
     });
 
-    // Route for displaying user login history (requires login)
+    // Route for user history
     app.get("/userHistory", ensureLogin, (req, res) => {
-      res.render("userHistory"); // Render the user history page
+      res.render("userHistory");
     });
 
-    // Start the server on the specified port
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
   })
   .catch((error) => {
-    console.error("Failed to initialize authentication data:", error); // Log error if authentication initialization fails
+    console.error("Failed to initialize authentication data:", error);
   });
+
+
