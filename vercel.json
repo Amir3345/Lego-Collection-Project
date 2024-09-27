@@ -8,24 +8,23 @@
   ],
   "routes": [
     {
-      "src": "/login",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/register",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/lego/sets",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/public/(.*)",
-      "headers": { "cache-control": "public, max-age=31536000, immutable" },
+      "src": "/public/(.*)", 
       "dest": "/Public/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/login", 
+      "dest": "/server.js"
+    },
+    {
+      "src": "/register", 
+      "dest": "/server.js"
+    },
+    {
+      "src": "/lego/sets", 
+      "dest": "/server.js"
+    },
+    {
+      "src": "/(.*)", 
       "dest": "/server.js"
     }
   ]
