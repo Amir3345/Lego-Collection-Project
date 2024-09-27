@@ -28,6 +28,8 @@ require("dotenv").config();
 const { name } = require("ejs");
 const Sequelize = require("sequelize");
 
+require('pg'); 
+
 const sequelize = new Sequelize(
   process.env.PGDATABASE,
   process.env.PGUSER,
