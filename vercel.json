@@ -12,14 +12,6 @@
       "dest": "/Public/$1"
     },
     {
-      "src": "/login", 
-      "dest": "/server.js"
-    },
-    {
-      "src": "/register", 
-      "dest": "/server.js"
-    },
-    {
       "src": "/lego/sets", 
       "dest": "/server.js"
     },
