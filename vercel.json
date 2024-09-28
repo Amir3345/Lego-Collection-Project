@@ -8,8 +8,30 @@
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "server.js" 
+    },
+    {
       "src": "/(.*)",
-      "dest": "server.js"
+      "dest": "/Public/$1" 
+    },
+    {
+      "src": "/register",
+      "methods": ["GET", "POST"],
+      "dest": "server.js" 
+    },
+    {
+      "src": "/login",
+      "methods": ["GET", "POST"],
+      "dest": "server.js" 
+    },
+    {
+      "src": "/lego/(.*)",
+      "dest": "server.js" 
+    },
+    {
+      "src": "/(.*)",
+      "dest": "server.js" 
     }
   ]
 }
