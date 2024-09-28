@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "server.js", // Adjust this to your main server file if it's different
+      "src": "server.js", 
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "Modules/api/$1.js" // Adjust if your API files are stored elsewhere
+      "dest": "Modules/api/$1.js" 
     },
     {
       "src": "/(.*)",
@@ -19,8 +19,4 @@
       "src": "/(.*)",
       "dest": "views/$1"
     }
-  ],
-  "env": {
-    "YOUR_ENV_VARIABLE": "value" // Add any environment variables your project needs
-  }
 }
